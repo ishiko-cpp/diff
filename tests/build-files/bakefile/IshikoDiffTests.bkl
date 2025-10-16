@@ -2,13 +2,12 @@ ishikopath = envvar("ISHIKO_CPP_ROOT");
 import $(ishikopath)/diff/include/Ishiko/Diff.bkl;
 import $(ishikopath)/test-framework/include/Ishiko/TestFramework/Core.bkl;
 
-toolsets = gnu vs2022 vs2019 vs2017 vs2015;
+toolsets = gnu vs2022 vs2019 vs2017;
 
 gnu.makefile = ../gnumake/GNUmakefile;
 vs2022.solutionfile = ../vc17/IshikoDiffTests.sln;
 vs2019.solutionfile = ../vc16/IshikoDiffTests.sln;
 vs2017.solutionfile = ../vc15/IshikoDiffTests.sln;
-vs2015.solutionfile = ../vc14/IshikoDiffTests.sln;
 
 program IshikoDiffTests : IshikoDiff, IshikoTestFrameworkCore
 {
@@ -16,9 +15,14 @@ program IshikoDiffTests : IshikoDiff, IshikoTestFrameworkCore
 
     if ($(toolset) == gnu)
     {
-        cxx-compiler-options = "-std=c++11";
+        cxx-compiler-options = "-std=c++14";
         libs += IshikoTestFrameworkCore IshikoConfiguration IshikoDiff IshikoXML IshikoFileSystem IshikoIO IshikoProcess IshikoTime IshikoText IshikoErrors IshikoBasePlatform;
         libs += fmt boost_filesystem;
+    }
+
+    if ($(toolset) != gnu)
+    {
+        cxx-compiler-options = "/utf-8";
     }
 
     headers
